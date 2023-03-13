@@ -211,11 +211,56 @@ function findSolution(target) {
   }
   return find(1, "1")
 }
-console.log(findSolution(13));
+console.log(findSolution(81));
 /* The function find creates a tree using the || and explores each branch until a null is returned. This is because 
    null evaluates falsy in || statements so after exploring the +5 branch until returning null, it traces back to the 
    previous branch then returns the other side, *3. If this returns null, it has to backtrack until it either returns 
    the history or evaluates the original find function null. */
+
+// OPTIMIZE
+
+/* One strategy to optimize this program to find the fastest path would be to implement a breadth-first search algorithm 
+   instead of a depth-first search algorithm. The breadth-first search algorithm would explore all possible paths from 1 
+   to the target, and keep track of the shortest path it found so far.
+
+   To implement this, we could use a queue to keep track of all the paths that need to be explored. We would start with the 
+   path "1", and add all its possible extensions (i.e., adding 5 or multiplying by 3) to the queue. Then we would take the 
+   next path from the queue, and repeat the process until we find a path that reaches the target. At each step, we would 
+   keep track of the length of the path, and update the shortest path if we find a path that is shorter than the current 
+   shortest path.
+
+   Here is an implementation of this algorithm: 
+*/
+
+
+function findFastestSolution(target) {
+  let queue = [{ current: 1, history: "1", steps: 0 }];
+  let shortestPath = null;
+
+  while (queue.length > 0) {
+    let { current, history, steps } = queue.shift();
+
+    if (current == target) {
+      if (shortestPath === null || steps < shortestPath.steps) {
+        shortestPath = { history, steps };
+      }
+    } else if (current < target) {
+      queue.push({ current: current + 5, history: `${history} + 5`, steps: steps + 1 });
+      queue.push({ current: current * 3, history: `${history} * 3`, steps: steps + 1 });
+    }
+  }
+
+  return shortestPath === null ? null : shortestPath.history;
+}
+/* This implementation uses an object to keep track of the current number, the history of how we got there, and the number 
+   of steps taken so far. We use the shift() method to remove the first path from the queue, and add its possible extensions 
+   to the end of the queue. We keep track of the shortest path found so far in the shortestPath variable, and update it if we 
+   find a path that is shorter.
+
+   By using breadth-first search, this algorithm will explore all possible paths from 1 to the target in a systematic way, and
+   find the shortest path in terms of the number of steps taken. 
+*/
+
 
 // GROWING FUNCTIONS
 
