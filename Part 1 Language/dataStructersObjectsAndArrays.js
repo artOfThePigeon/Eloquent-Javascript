@@ -42,6 +42,30 @@ function phi(table) {
 console.log(phi([76, 9, 4, 1]))
 // this is a direct transation of phi formula into javascript.
 
+/* In order to populate the frequency table with a raw data set, the following function can be used. It takes the dataset
+   as journal, then creates a table binding as an array. Each index of the array corresponds to the two bit binaries of 
+   whether or not the event occurred and if it corresponded with a squirrel transformation. It then checks each object of
+   the array (each entry) then increments the index accordingly. So, if neither event nor squirrel happened, it stays at 0.
+   If the event happened, it adds 1, and if the squirrel happened it adds 2 for a total of 3. This corresponds to the last
+   index of the array, position 3. Then it increments whatever position it found and proceeds with the loop. 
+*/ 
+function tableFor(event, journal) {
+	let table = [0, 0, 0, 0];
+	for (let i = 0; i < journal.length; i++) {
+		let entry = journal[i], index = 0;
+		if (entry.events.includes(event)) index += 1;
+		if (entry.squirrel) index += 2;
+		table[index] += 1;
+	}
+	return table;
+}
+
+/* The for loop can be re-written using more modern javascript syntax */
+for (let entry of JOURNAL) {
+	console.log(`${entry.events.length} events`);
+}
+ 
+
 
 
 //-----the below is just practice and notes from the examples ------//
@@ -146,6 +170,19 @@ const score = {visitors: 0, home: 0};
 score.visitors = 1
 // this is allowed, but the below is not:
 // score = {visitors: 1, home: 0}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
