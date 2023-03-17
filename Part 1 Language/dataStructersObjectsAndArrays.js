@@ -1,3 +1,4 @@
+
 // Lycanthrope Log
 
 /* Jacques keeps turning into a squirrel and doesn't know why. To figure it out, he has begun keeping a
@@ -17,7 +18,7 @@ addEntry(["weekend", "cycling", "break", "peanuts",
   		  "beer"], true);
 
 /* This frequency table takes squirrel transformations and pizza events, and displays the number of times the 
-   combination occured
+   combination occured. Data taken from journal.js
 
    | No squirrel, no pizza 76 | No squirrel, pizza 9 |
    | Squirrel, no pizza 4.    | Squirrel, pizza 1.   |
@@ -60,11 +61,54 @@ function tableFor(event, journal) {
 	return table;
 }
 
-/* The for loop can be re-written using more modern javascript syntax */
-for (let entry of JOURNAL) {
-	console.log(`${entry.events.length} events`);
+/* In order to isolate each event so we can create a frequency table then get phi, we have to iterate through each entry
+   and create an array to store each unique value.
+ */
+function journalEvents(journal) {
+	let events = [];
+	for (let entry of journal) {
+		for (let event of entry.events) {
+			if (!events.includes(event)) {
+				events.push(event);
+			}
+		}
+	}
+	return events;
 }
+
+// ANALYSIS
+
+/* Now that the events can be isolated, we can take each one and create a frequency table, then get its phi. The commented
+   code below is added in the index.html
+  */
+
+// for (let event of journalEvents(JOURNAL)) {
+// 	console.log(entry + ': ' + phi(tableFor(entry, JOURNAL)));
+// }
+
+/* To further filter this to only show correlations greater than .1 or less than -.1:
+*/
+
+// for (let event of journalEvents(JOURNAL)) {
+//   let correlation = phi(tableFor(event, JOURNAL));
+//   if (correlation > 0.1 || correlation < -0.1) {
+//     console.log(event + ":", correlation);
+//   }
+// }
+
+/* The result of the above shows strong positive correlation with eating peanuts, and a strong negative correlation with
+ brushing teeth. Finally, to see the correlation between eating peanuts and not brushing teeth, we can run the same
+ function, having iterated through the data for those 2 points:
+*/
  
+//  for (let entry of JOURNAL) {
+// 	if (entry.events.includes('peanuts') &&
+// 		!entry.events.includes('brushed teeth')) {
+// 		entry.events.push('peanut teeth');
+// 	}
+// }
+// console.log(phi(tableFor('peanut teeth', JOURNAL)));
+
 
 
 
@@ -171,10 +215,121 @@ score.visitors = 1
 // this is allowed, but the below is not:
 // score = {visitors: 1, home: 0}
 
+// Further Arrayology
 
+let todoList = []
+function remember(task) {
+	todoList.push(task);
+}
+remember('eat breakfast');
+remember('study javascript');
+remember('kiss girlfriend');
+remember('study javascript');
+console.log(todoList);
+// → ['eat breakfast', 'study javascript', 'kiss girlfriend', 'study javascript']
 
+function getTask() {
+	return todoList.shift();
+}
+console.log(getTask());
+// → eat breakfast
 
+function rememberUrgently(task) {
+	todoList.unshift(task);
+}
+rememberUrgently('push code');
+console.log(todoList);
+// → ['push code', 'study javascript', 'kiss girlfriend', 'study javascript']
 
+console.log(todoList.indexOf('study javascript'));
+// → 1
+
+console.log(todoList.lastIndexOf('study javascript'));
+// → 3
+// calling the lastIndexsOf method here searches from the last index, so if finds the value at position 3, not 1. 
+// Both indexOf and lastIndexOf take an optional second argument that indicates where to start searching.
+
+console.log([0, 1, 2, 3, 4].slice(2, 4));
+// → [2, 3]
+console.log([0, 1, 2, 3, 4].slice(2));
+// → [2, 3, 4]
+/* The start index of slice inclusive, the end index is exclusive. When end is not given, slice talks all 
+   elements after start. you can ommit the first argument to just copy the array.
+*/
+
+function treeBeard(array, index) {
+	return array.slice(0, index)
+	.concat(array.slice(index + 1));
+}
+console.log(treeBeard(['a','b','c','d','e'], 2));
+// → ["a", "b", "d", "e"]
+/* The concat method can be used to glue arrays together to create a new array, similar to what the + operator 
+   does for strings.
+*/
+
+//Strings and their properties
+
+let message = 'snow listens to the shouting rabbit'
+console.log(message.slice(1, 5) + message.slice(6, 8) +
+	message.slice(15, 20) + message.slice(21, 24) +
+	message.slice(29, 30));
+console.log(message.indexOf(" t"));
+// → 12
+console.log(message.lastIndexOf(" t"));
+// → 15
+// lastIndexOf can take more than 1 consecutive character
+console.log("   dude \n ".trim());
+// → dude
+
+console.log(String(7).padStart(3, "0"));
+// → 007 
+
+let sentence = 'now is the hour of our discontent';
+let words = sentence.split(' ');
+console.log(words);
+// → ['now', 'is', 'the', 'hour', 'of', 'our', 'discontent']
+console.log(words.join('_'));
+// → now_is_the_hour_of_our_discontent
+
+console.log('what\'s new pussycat ' + 'whoa '.repeat(3));
+
+let country = 'Croatia'
+console.log(country.length);
+// → 7
+console.log(country[6]);
+// → a
+
+// Rest parameters
+
+function max(...numbers) {
+	let result = -Infinity;
+	for (let number of numbers) {
+		if (number > result) result = number
+	} 
+	return result
+}
+console.log(max(false, -8, -9, 0));
+// → false
+/* Here I define any number of parameters to be allowed, then compare the first argument to -Infinity. 
+   This becomes the first result binding. For each subsequent number, if it is greater than the resut,
+   then it becomes the result. After iterating through all the arguments, the result that is the greatest
+   is returned.
+
+   If I changed the parameters to max(q, ...numbers), then called max(100, -8, -9, false), the 100 would not be counted.
+*/
+
+// I can use a 3 dot notation to call a function with an array of arguments
+let numbers = [7 + 1, 6, 7, 5, 3, 0, 10 - 1]
+console.log(max(...numbers));
+// → 9
+
+// It's possible to include an array like this along with other arguments
+console.log(max(1, ...numbers, 20));
+// → 20
+
+// Square bracket array notation also allows the triple dot operator to spread another array into the new array
+let breakfast = ['bean', 'burrito'];
+console.log(['eat', 'big', ...breakfast, 'soon']);
 
 
 
