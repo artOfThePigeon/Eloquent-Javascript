@@ -1,3 +1,166 @@
+// EXERCISES
+
+
+// 1. The sum of a range
+
+/* Write a range function that takes 2 arguments, 'start' and 'end', with an optional third that indicates the 'step', 
+   and returns an array containing all the numbers from the start up to (and including) end.
+*/
+function range(start, end, step = start < end ? 1 : -1) {
+  let result = [];
+
+  if (step > 0) {
+    for (let i = start; i <= end; i += step) result.push(i);
+  } else {
+    for (let i = start; i >= end; i += step) result.push(i);
+  }
+  return result;
+}
+
+console.log(range(1, 10));
+// → [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+console.log(range(5, 2, -1));
+// → [5, 4, 3, 2]
+
+/* Notes: I first used 'if(start < end),' which then required Math.abs to prevent an endless loop if you enter a step value that doesn't makse sense.
+   This "error catching" is unneeded complexity. The code above avoids endless loops altogether by checking if step > 0. This is because The IF 
+   statement should really only check if it should use the count up or count down loop. The check of whether step > 0 is better because that is 
+   all the system really needs to know, "should I step up from start to end, or step down." If a negative step is entered, then it counts down, 
+   and if the start is less than the end in that case,the loop merely concludes and returns the empty array. 
+
+function rangeDave(start, end, step = 1) {
+	let result = [];
+	step = Math.abs(step);
+	if (start <= end) {
+		for (let i = start; i <= end; i += step) result.push(i);
+	} else {
+		for (let i = start; i >= end; i -= step) result.push(i);
+	}
+	return result;
+}
+*/
+
+// Next, write a sum function that takes an array of numbers and returns the sum of these numbers. Run the example program and see whether it does indeed return 55.
+function sum(numbers) {
+	let sum = 0
+	for (let i of numbers) {
+		sum += i;
+	}
+	return sum;
+}
+console.log(sum(range(1, 10)));
+// → 55
+
+//2. Reversing an array
+
+/* Arrays have a reverse method that changes the array by inverting the order in which its elements appear. For this exercise, write two functions, reverseArray 
+   and reverseArrayInPlace. The first, reverseArray, takes an array as argument and produces a new array that has the same elements in the inverse order. The second, 
+   reverseArrayInPlace, does what the reverse method does: it modifies the array given as argument by reversing its elements. Neither may use the standard reverse method.
+*/
+
+function reverseArray(array) {
+	let newArray = [];
+	for (let i of array) newArray.unshift(i);
+	return newArray;
+}
+
+/* An alternative to the above would be to iterate starting from the end, and then pushing the array values to the new array
+
+function reverseArrayAlt(array) {
+	let newArray = [];
+	for (let i = array.length - 1; i >= 0; i--) {
+		newArray.push(array[i]);
+	}
+	return newArray;
+}
+*/
+
+function reverseArrayInPlace(array) {
+	for (let i = 0; i < Math.floor(array.length / 2); i++) {
+		let mirror = array[i];
+		array[i] = array[array.length - 1 - i];
+		array[array.length - 1 - i] = mirror;
+	}
+	return array;
+}
+
+/* Becase I'm swapping the first and last values of the array, I only need to iterate through half the length of the array 
+   (otherwise, the swapping would continue even after properly reversed until the original array is returned). I use Math.floor 
+   to round down if the array has an odd # of values, because the value in the middle doesn't need to swap with anything. Then,
+   the local binding 'mirror' remembers the starting position, so when I replace it with the corresponding swap value (indicated by 
+   [array.length - 1 - i]) I can still use it to replace the swap value. The swap value is constructed by taking the length and
+   subtracting 1 because arrays are 0-indexed and I want the last value of the array, then subtracting it so it will count backwards
+   corresponding to the increment of i. 
+ */
+
+console.log(reverseArray(["A", "B", "C"]));
+// → ["C", "B", "A"];
+let arrayValue = [1, 2, 3, 4, 5];
+reverseArrayInPlace(arrayValue);
+console.log(arrayValue);
+// → [5, 4, 3, 2, 1]
+
+
+// 3. A List
+
+/* Write a function arrayToList that builds up a list structure like the one shown when given [1, 2, 3] as argument. 
+   Also write a listToArray function that produces an array from a list. Then add a helper function prepend, which takes 
+   an element and a list and creates a new list that adds the element to the front of the input list, and nth, which takes a 
+   list and a number and returns the element at the given position in the list (with zero referring to the first element) or 
+   undefined when there is no such element:
+ */
+
+function arrayToList(array) {
+	let list = null;
+	for (let i = array.length - 1; i >= 0; i--) {
+		list = {value: array[i], rest: list};
+	}
+	return list;
+}
+
+function listToArray(list) {
+	let array = [];
+	for (let node = list; node; node = node.rest) {
+		array.push(node.value);
+	}
+	return array;
+}
+
+// function prepend(element, list) {
+// 	return newList = {value: element, rest: list};
+// }
+
+function prepend(value, list) {
+  return {value, rest: list};
+}
+
+function nth(list, element) {
+	for (let count = 0; count < element; count++) {
+		if (list.rest) list = list.rest;
+		else list = {};
+	} 
+	return list.value
+}
+
+// Also write a recursive version of nth:
+
+function nthRecursive(list, element) {
+	if (!list) return undefined;
+	else if (element == 0) return list.value;
+	else return nthRecursive(list.rest, element - 1);
+}
+console.log(arrayToList([10, 20]));
+// → {value: 10, rest: {value: 20, rest: null}}
+console.log(listToArray(arrayToList([10, 20, 30])));
+// → [10, 20, 30]
+console.log(prepend(10, prepend(20, null)));
+// → {value: 10, rest: {value: 20, rest: null}}
+console.log(nthRecursive(arrayToList([10, 20, 30]), 1));
+// → 20
+
+
+// ----------------------------------------------------------------------- //
+
 
 // Lycanthrope Log
 
@@ -376,131 +539,6 @@ console.log(string);
 // → {"squirrel":false,"events":["weekend","peanuts"]}
 console.log(JSON.parse(string).events);
 // → ['weekend', 'peanuts']
-
-// EXERCISES
-
-
-// 1. The sum of a range
-
-/* Write a range function that takes 2 arguments, 'start' and 'end', with an optional third that indicates the 'step', 
-   and returns an array containing all the numbers from the start up to (and including) end.
-*/
-function range(start, end, step = start < end ? 1 : -1) {
-  let result = [];
-
-  if (step > 0) {
-    for (let i = start; i <= end; i += step) result.push(i);
-  } else {
-    for (let i = start; i >= end; i += step) result.push(i);
-  }
-  return result;
-}
-
-console.log(range(1, 10));
-// → [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-console.log(range(5, 2, -1));
-// → [5, 4, 3, 2]
-
-/* Notes: I first used 'if(start < end),' which then required Math.abs to prevent an endless loop if you enter a step value that doesn't makse sense.
-   This "error catching" is unneeded complexity. The code above avoids endless loops altogether by checking if step > 0. This is because The IF 
-   statement should really only check if it should use the count up or count down loop. The check of whether step > 0 is better because that is 
-   all the system really needs to know, "should I step up from start to end, or step down." If a negative step is entered, then it counts down, 
-   and if the start is less than the end in that case,the loop merely concludes and returns the empty array. 
-
-function rangeDave(start, end, step = 1) {
-	let result = [];
-	step = Math.abs(step);
-	if (start <= end) {
-		for (let i = start; i <= end; i += step) result.push(i);
-	} else {
-		for (let i = start; i >= end; i -= step) result.push(i);
-	}
-	return result;
-}
-*/
-
-// Next, write a sum function that takes an array of numbers and returns the sum of these numbers. Run the example program and see whether it does indeed return 55.
-function sum(numbers) {
-	let sum = 0
-	for (let i of numbers) {
-		sum += i;
-	}
-	return sum;
-}
-console.log(sum(range(1, 10)));
-// → 55
-
-//2. Reversing an array
-
-/* Arrays have a reverse method that changes the array by inverting the order in which its elements appear. For this exercise, write two functions, reverseArray 
-   and reverseArrayInPlace. The first, reverseArray, takes an array as argument and produces a new array that has the same elements in the inverse order. The second, 
-   reverseArrayInPlace, does what the reverse method does: it modifies the array given as argument by reversing its elements. Neither may use the standard reverse method.
-*/
-
-function reverseArray(array) {
-	let newArray = [];
-	for (let i of array) newArray.unshift(i);
-	return newArray;
-}
-
-/* An alternative to the above would be to iterate starting from the end, and then pushing the array values to the new array
-
-function reverseArrayAlt(array) {
-	let newArray = [];
-	for (let i = array.length - 1; i >= 0; i--) {
-		newArray.push(array[i]);
-	}
-	return newArray;
-}
-*/
-
-function reverseArrayInPlace(array) {
-	for (let i = 0; i < Math.floor(array.length / 2); i++) {
-		let mirror = array[i];
-		array[i] = array[array.length - 1 - i];
-		array[array.length - 1 - i] = mirror;
-	}
-	return array;
-}
-
-/* Becase I'm swapping the first and last values of the array, I only need to iterate through half the length of the array 
-   (otherwise, the swapping would continue even after properly reversed until the original array is returned). I use Math.floor 
-   to round down if the array has an odd # of values, because the value in the middle doesn't need to swap with anything. Then,
-   the local binding 'mirror' remembers the starting position, so when I replace it with the corresponding swap value (indicated by 
-   [array.length - 1 - i]) I can still use it to replace the swap value. The swap value is constructed by taking the length and
-   subtracting 1 because arrays are 0-indexed and I want the last value of the array, then subtracting it so it will count backwards
-   corresponding to the increment of i. 
- */
-
-console.log(reverseArray(["A", "B", "C"]));
-// → ["C", "B", "A"];
-let arrayValue = [1, 2, 3, 4, 5];
-reverseArrayInPlace(arrayValue);
-console.log(arrayValue);
-// → [5, 4, 3, 2, 1]
-
-
-// 3. A List
-
-/* Write a function arrayToList that builds up a list structure like the one shown when given [1, 2, 3] as argument. 
-   Also write a listToArray function that produces an array from a list. Then add a helper function prepend, which takes 
-   an element and a list and creates a new list that adds the element to the front of the input list, and nth, which takes a 
-   list and a number and returns the element at the given position in the list (with zero referring to the first element) or 
-   undefined when there is no such element.
- */
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
