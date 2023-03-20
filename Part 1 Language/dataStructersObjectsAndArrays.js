@@ -1,11 +1,11 @@
+
 // EXERCISES
 
 
-// 1. The sum of a range
+// 1. The Sum of a Range
 
-/* Write a range function that takes 2 arguments, 'start' and 'end', with an optional third that indicates the 'step', 
-   and returns an array containing all the numbers from the start up to (and including) end.
-*/
+// Write a range function that takes 2 arguments, 'start' and 'end', with an optional third that indicates the 'step', and returns an array containing all the numbers from the start up to (and including) end.
+
 function range(start, end, step = start < end ? 1 : -1) {
   let result = [];
 
@@ -22,7 +22,8 @@ console.log(range(1, 10));
 console.log(range(5, 2, -1));
 // → [5, 4, 3, 2]
 
-/* Notes: I first used 'if(start < end),' which then required Math.abs to prevent an endless loop if you enter a step value that doesn't makse sense.
+/* Notes: 
+	I first used 'if(start < end),' which then required Math.abs to prevent an endless loop if you enter a step value that doesn't makse sense.
    This "error catching" is unneeded complexity. The code above avoids endless loops altogether by checking if step > 0. This is because The IF 
    statement should really only check if it should use the count up or count down loop. The check of whether step > 0 is better because that is 
    all the system really needs to know, "should I step up from start to end, or step down." If a negative step is entered, then it counts down, 
@@ -41,6 +42,7 @@ function rangeDave(start, end, step = 1) {
 */
 
 // Next, write a sum function that takes an array of numbers and returns the sum of these numbers. Run the example program and see whether it does indeed return 55.
+
 function sum(numbers) {
 	let sum = 0
 	for (let i of numbers) {
@@ -51,12 +53,13 @@ function sum(numbers) {
 console.log(sum(range(1, 10)));
 // → 55
 
-//2. Reversing an array
 
-/* Arrays have a reverse method that changes the array by inverting the order in which its elements appear. For this exercise, write two functions, reverseArray 
-   and reverseArrayInPlace. The first, reverseArray, takes an array as argument and produces a new array that has the same elements in the inverse order. The second, 
-   reverseArrayInPlace, does what the reverse method does: it modifies the array given as argument by reversing its elements. Neither may use the standard reverse method.
-*/
+// ------------------------------------------------------------
+
+
+// 2. Reversing an array
+
+// Arrays have a reverse method that changes the array by inverting the order in which its elements appear. For this exercise, write two functions, reverseArray and reverseArrayInPlace. The first, reverseArray, takes an array as argument and produces a new array that has the same elements in the inverse order. The second, reverseArrayInPlace, does what the reverse method does: it modifies the array given as argument by reversing its elements. Neither may use the standard reverse method.
 
 function reverseArray(array) {
 	let newArray = [];
@@ -64,7 +67,8 @@ function reverseArray(array) {
 	return newArray;
 }
 
-/* An alternative to the above would be to iterate starting from the end, and then pushing the array values to the new array
+/* Notes: 
+   An alternative to the above would be to iterate starting from the end, and then pushing the array values to the new array
 
 function reverseArrayAlt(array) {
 	let newArray = [];
@@ -84,7 +88,8 @@ function reverseArrayInPlace(array) {
 	return array;
 }
 
-/* Becase I'm swapping the first and last values of the array, I only need to iterate through half the length of the array 
+/* Notes:
+   Becase I'm swapping the first and last values of the array, I only need to iterate through half the length of the array 
    (otherwise, the swapping would continue even after properly reversed until the original array is returned). I use Math.floor 
    to round down if the array has an odd # of values, because the value in the middle doesn't need to swap with anything. Then,
    the local binding 'mirror' remembers the starting position, so when I replace it with the corresponding swap value (indicated by 
@@ -101,15 +106,18 @@ console.log(arrayValue);
 // → [5, 4, 3, 2, 1]
 
 
+// ------------------------------------------------------------
+
+
 // 3. A List
 
-/* Write a function arrayToList that builds up a list structure like the one shown when given [1, 2, 3] as argument. 
-   Also write a listToArray function that produces an array from a list. Then add a helper function prepend, which takes 
-   an element and a list and creates a new list that adds the element to the front of the input list, and nth, which takes a 
-   list and a number and returns the element at the given position in the list (with zero referring to the first element) or 
-   undefined when there is no such element:
- */
+// a. Write a function 'arrayToList' that builds up a list structure when given [1, 2, 3] as argument.  
+// b. Also write a 'listToArray' function that produces an array from a list. 
+// c. Then add a helper function 'prepend', which takes an element and a list and creates a new list that adds the element to the front of the input list,
+// d. And 'nth', which takes a list and a number and returns the element at the given position in the list (with zero referring to the first element) or undefined when there is no such element:
+// e. Also write a recursive version of nth:
 
+// (a.)
 function arrayToList(array) {
 	let list = null;
 	for (let i = array.length - 1; i >= 0; i--) {
@@ -118,6 +126,11 @@ function arrayToList(array) {
 	return list;
 }
 
+console.log(arrayToList([10, 20]));
+// → {value: 10, rest: {value: 20, rest: null}}
+
+
+// (b.)
 function listToArray(list) {
 	let array = [];
 	for (let node = list; node; node = node.rest) {
@@ -126,40 +139,78 @@ function listToArray(list) {
 	return array;
 }
 
-// function prepend(element, list) {
-// 	return newList = {value: element, rest: list};
-// }
+/* Notes:
+	The for loop begins with a binding to node, which serves as the loop condition. As long as node evaluates true, meaning it exists, we push its corresponding value binding to the array, then iterate a level deeper.
+*/
 
+console.log(listToArray(arrayToList([10, 20, 30])));
+// → [10, 20, 30]
+
+
+// (c.)
 function prepend(value, list) {
   return {value, rest: list};
 }
 
+console.log(prepend(10, prepend(20, null)));
+// → {value: 10, rest: {value: 20, rest: null}}
+
+/* Notes: 
+   The function prepend calls itself when used as the list parameter. First, 10 gets binded to the object element, value. Then, list, as the value to the object element rest, calls prepend to create an object and bind 20 to the inner value element, and null to the inner rest.
+*/
+
+// (d.)
 function nth(list, element) {
+	if (!list) return undefined;
 	for (let count = 0; count < element; count++) {
-		if (list.rest) list = list.rest;
-		else list = {};
+		list = list.rest;
 	} 
 	return list.value
 }
+/* Notes:
+	in order to get the element of a given position, we have to iterate inward 'element' number of times. To do this, we setup a count equal to the position of the first element, 0, then move inward until the count reaches the element position and return the value.
+*/
 
-// Also write a recursive version of nth:
-
+// (e.)
 function nthRecursive(list, element) {
 	if (!list) return undefined;
 	else if (element == 0) return list.value;
 	else return nthRecursive(list.rest, element - 1);
 }
-console.log(arrayToList([10, 20]));
-// → {value: 10, rest: {value: 20, rest: null}}
-console.log(listToArray(arrayToList([10, 20, 30])));
-// → [10, 20, 30]
-console.log(prepend(10, prepend(20, null)));
-// → {value: 10, rest: {value: 20, rest: null}}
+
 console.log(nthRecursive(arrayToList([10, 20, 30]), 1));
 // → 20
 
+/* Notes:
+	In order to accomplish the result as nth, but recursively, we still iterate inward 'element' number of times, but there are 2 main differencs. First, instead of explicitly binding the inner list, we simply pass it as a parameter to the recursive function call. Second, instead of creating a count binding to represent first position of an object element, 0, and then counting up, the recursive function call passes the (N - 1) element and decrements down to 0. When it finally counts down to the 0 position, we have iterated up exactly element number of times.
+*/
 
-// ----------------------------------------------------------------------- //
+
+// ------------------------------------------------------------
+
+
+// 4. Deep Comparison
+
+// The == operator compares objects by identity. But sometimes you’d prefer to compare the values of their actual properties. Write a function deepEqual that takes two values and returns true only if they are the same value or are objects with the same properties, where the values of the properties are equal when compared with a recursive call to deepEqual.
+
+function deepEqual(objA, objB) {
+	if (objA === objB) return true;
+
+	if (typeof objA != 'object' || objA == null ||
+		 typeof objB != 'object' || objB == null) return false;
+
+	let keysA = Object.keys(objA), keysB = Object.keys(objB);
+
+	if (keysA.length != keysB.length) return false;
+
+	for (let key of keysA){
+		if(!keysB.includes(key) || !deepEqual(objA[key], objB[key])) return false;
+	}
+	return true;
+}
+
+
+// ------------------------------------------------------------
 
 
 // Lycanthrope Log
@@ -249,7 +300,7 @@ function journalEvents(journal) {
 // 	console.log(entry + ': ' + phi(tableFor(entry, JOURNAL)));
 // }
 
-/* To further filter this to only show correlations greater than .1 or less than -.1:
+/* In order to further filter this to only show correlations greater than 0.1 or less than -0.1:
 */
 
 // for (let event of journalEvents(JOURNAL)) {
@@ -264,14 +315,13 @@ function journalEvents(journal) {
  function, having iterated through the data for those 2 points:
 */
  
-//  for (let entry of JOURNAL) {
+// for (let entry of JOURNAL) {
 // 	if (entry.events.includes('peanuts') &&
 // 		!entry.events.includes('brushed teeth')) {
 // 		entry.events.push('peanut teeth');
 // 	}
 // }
 // console.log(phi(tableFor('peanut teeth', JOURNAL)));
-
 
 
 
@@ -343,7 +393,7 @@ let objectA = {a: 1, b: 2};
 Object.assign(objectA, {b: 3, c: 4});
 console.log(objectA);
 
-// array of objects
+// Array of objects
 let journalPrac = [
   {events: ["work", "touched tree", "pizza",
   			"running","television"],
@@ -539,24 +589,6 @@ console.log(string);
 // → {"squirrel":false,"events":["weekend","peanuts"]}
 console.log(JSON.parse(string).events);
 // → ['weekend', 'peanuts']
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
