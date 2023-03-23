@@ -12,6 +12,13 @@
 This HTML document is just a placeholder to run my javascript examples and play in the console. -->
 	
 	<script type="text/javascript" src="higherOrderFunctions.js"></script>
+	<script type="text/javascript" src="scripts.js"></script>
+	<script type="text/javascript">
+	console.log(SCRIPTS.filter(s => s.direction == "ttb"));
+
+let rtlScripts = SCRIPTS.filter(s => s.direction == "rtl");
+console.log(map(rtlScripts, s => s.name));
+	</script>
 
 </body>
 </html>
