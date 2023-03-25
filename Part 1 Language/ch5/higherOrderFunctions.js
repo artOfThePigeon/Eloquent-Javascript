@@ -34,6 +34,7 @@ repeat(5, i => {
 	labels.push(`Unit: ${i + 1}`);
 });
 
+
 // Higher Order Functions: Functions that operate on other functions, either by taking them as arguments or returning them.
 
 
@@ -112,21 +113,30 @@ function map(array, transform) {
 
 // Summarizing with Reduce
 
+// Builds a value by repeatedly taking a single element from the array, and combining it with the currently value.
 
+function reduce(array, combine, start) {
+	let current = start;
+	for (let element of array) {
+		current = combine(current, element);
+	}
+	return current;
+}
 
+console.log(reduce([1, 2, 3, 4], (a, b) => a + b, 0));
 
+// Using reduce twice to find the script with the most characaters
 
+function characterCount(script) {
+	return script.ranges.reduce((count, [from, to]) => {
+		return count + (to - from);
+	}, 0);
+}
 
-
-
-
-
-
-
-
-
-
-
+console.log(SCRIPTS.reduce((a, b) => {
+	return characterCount(a) < characterCount(b) ? b : a;
+}));
+// The characterCount function reduces the ranges assigned to a script by summing their sizes. Note the use of destructuring in the paramter list of reduce.
 
 
 
