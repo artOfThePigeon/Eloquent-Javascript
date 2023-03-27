@@ -93,10 +93,10 @@ function filter(array, test) {
 	return passed;
 }
 
-//console.log(filter(SCRIPTS, script => script.living));
+console.log(filter(SCRIPTS, script => script.living));
 
 // This is a standard array method, and can be more easily written as:
-//console.log(SCRIPTS.filter(s => s.direction == "ttb"));
+console.log(SCRIPTS.filter(s => s.direction == "ttb"));
 
 
 // Transforming with Map: The map method transforms an array by applying a function to all of its elements and bilding a new array from the returned values.
@@ -108,8 +108,8 @@ function map(array, transform) {
 	return mapped;
 }
 
-// let rtlScripts = SCRIPTS.filter(s => s.direction == "rtl");
-// console.log(map(rtlScripts, d => d.name));
+let rtlScripts = SCRIPTS.filter(s => s.direction == "rtl");
+console.log(map(rtlScripts, d => d.name));
 
 // Summarizing with Reduce
 
@@ -134,28 +134,43 @@ function characterCount(script) {
 }
 
 console.log(SCRIPTS.reduce((a, b) => {
-	return characterCount(a) < characterCount(b) ? b : a;
+  return characterCount(a) < characterCount(b) ? b : a;
 }));
+
+// This is how the previous example would have been written without higher order functions
+let biggest = null;
+for(let script of SCRIPTS) {
+	if (biggest == null ||
+		characterCount(biggest) < characterCount(script)) {
+		biggest = script;
+	}
+}
 // The characterCount function reduces the ranges assigned to a script by summing their sizes. Note the use of destructuring in the paramter list of reduce.
 
+//Higher order functions start to shine when you need to "compose" operations.
+function average(array) {
+	return array.reduce((a, b) => a + b) / array.length;
+}
 
+// This shows the average year of origin for living and dead scripts in the data set.
+console.log(Math.round(average(SCRIPTS.filter(s => s.living).map(s => s.year))));
+// → 1165
 
+console.log(Math.round(average(
+	SCRIPTS.filter(s => !s.living).map(s => s.year))));
+// → 204
 
+// The above calculation can also be written as one big loop
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+let total = 0, count = 0;
+for (let script of SCRIPTS) {
+	if (script.living) {
+		total += script.year;
+		count += 1;
+	}
+}
+console.log(Math.round(total / count));
+// → 1165
 
 
 
