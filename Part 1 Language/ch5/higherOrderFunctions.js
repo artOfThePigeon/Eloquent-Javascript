@@ -113,8 +113,7 @@ console.log(map(rtlScripts, d => d.name));
 
 // Summarizing with Reduce
 
-// Builds a value by repeatedly taking a single element from the array, and combining it with the currently value.
-
+// Builds a value by repeatedly taking a single element from the array, and combining it with the current value.
 function reduce(array, combine, start) {
 	let current = start;
 	for (let element of array) {
@@ -123,19 +122,24 @@ function reduce(array, combine, start) {
 	return current;
 }
 
-console.log(reduce([1, 2, 3, 4], (a, b) => a + b, 0));
+// The standard reduce method will take the first element of the array as its start value and start reducing at the second element.
+console.log([1, 2, 3, 4].reduce((a, b) => a + b));
 
-// Using reduce twice to find the script with the most characaters
-
+// To use reduce twice to find the script with the most characters:
 function characterCount(script) {
+	// this looks through ranges, which is an array of arrays. Count
+	// is the accumulator, while [from, to] represent the range of 
+	// unicode characters. It then subtracts the range and adds it to the accumulator.
 	return script.ranges.reduce((count, [from, to]) => {
 		return count + (to - from);
 	}, 0);
 }
 
 console.log(SCRIPTS.reduce((a, b) => {
-  return characterCount(a) < characterCount(b) ? b : a;
+	return characterCount(a) < characterCount(b) ? b : a;
 }));
+// This calls reduce, and passes the values of the array ranges through the ternary operator.
+
 
 // This is how the previous example would have been written without higher order functions
 let biggest = null;
