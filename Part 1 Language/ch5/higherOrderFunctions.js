@@ -99,7 +99,7 @@ console.log(filter(SCRIPTS, script => script.living));
 console.log(SCRIPTS.filter(s => s.direction == "ttb"));
 
 
-// Transforming with Map: The map method transforms an array by applying a function to all of its elements and bilding a new array from the returned values.
+// Transforming with Map: The map method transforms an array by applying a function to all of its elements and building a new array from the returned values.
 function map(array, transform) {
 	let mapped = [];
 	for (let element of array) {
@@ -127,17 +127,18 @@ console.log([1, 2, 3, 4].reduce((a, b) => a + b));
 
 // To use reduce twice to find the script with the most characters:
 function characterCount(script) {
-	// this looks through ranges, which is an array of arrays. Count
-	// is the accumulator, while [from, to] represent the range of 
-	// unicode characters. It then subtracts the range and adds it to the accumulator.
 	return script.ranges.reduce((count, [from, to]) => {
 		return count + (to - from);
 	}, 0);
 }
+// this looks through ranges, which is an array of arrays. Count
+// is the accumulator, while [from, to] represent the range of 
+// unicode characters. It then subtracts the range and adds it to the accumulator.
 
 console.log(SCRIPTS.reduce((a, b) => {
 	return characterCount(a) < characterCount(b) ? b : a;
 }));
+// → {name: "Han", …}
 // This calls reduce, and passes the values of the array ranges through the ternary operator.
 
 
@@ -151,21 +152,23 @@ for(let script of SCRIPTS) {
 }
 // The characterCount function reduces the ranges assigned to a script by summing their sizes. Note the use of destructuring in the paramter list of reduce.
 
+
 //Higher order functions start to shine when you need to "compose" operations.
+
 function average(array) {
 	return array.reduce((a, b) => a + b) / array.length;
 }
+// The average function returns the value after an array is reduced, having added each subsequent value then divided by the array's length
 
-// This shows the average year of origin for living and dead scripts in the data set.
+// This shows the average year of origin for living scripts by first calling the filter method to find the living langauges, then creating a new array using map with only the year.
 console.log(Math.round(average(SCRIPTS.filter(s => s.living).map(s => s.year))));
 // → 1165
 
-console.log(Math.round(average(
-	SCRIPTS.filter(s => !s.living).map(s => s.year))));
+// This shows the average year of origin for dead scripts by simply negating s.living, which filters for boolean false values.
+console.log(Math.round(average(SCRIPTS.filter(s => !s.living).map(s => s.year))));
 // → 204
 
-// The above calculation can also be written as one big loop
-
+// The above calculation can also be written as one big loop, though less ideal because intermediate results arent represented as coheerent values.
 let total = 0, count = 0;
 for (let script of SCRIPTS) {
 	if (script.living) {
@@ -175,11 +178,23 @@ for (let script of SCRIPTS) {
 }
 console.log(Math.round(total / count));
 // → 1165
+// The main difference between the 2 is what the computer is doing. The first will build new arrays using filter and map. its more readable but performs more computations. 
 
+// Strings and Character Codes
 
-
-
-
+// to figure out what script a piece of text is using:
+function characterScript(code) {
+	for (let script of SCRIPTS) {
+		if (script.ranges.some(([from, to]) => {
+			return code >= from && code < to;
+		})) {
+			return script;
+		}
+	}
+	return null;
+}
+// the 'some' method is another higher order function. It takes a test function and
+// tells you whether that function returns true for any of the elements in the array
 
 
 
