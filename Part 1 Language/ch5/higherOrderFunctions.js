@@ -197,10 +197,34 @@ function characterScript(code) {
 // tells you whether that function returns true for any of the elements in the array
 
 
+// code units
 
+// Two emoji characters, horse and shoe
+let horseShoe = "🐴👟";
+console.log(horseShoe.length);
+// → 4
+console.log(horseShoe[0]);
+// → invalid
+console.log(horseShoe.charCodeAt(0));
+// → 55357 (Code of the half-character)
+console.log(horseShoe.codePointAt(0));
+// → 128052 (actual code for the horse emoji)
 
+// the charCodeAt method gives you a code unit, not a full character code.
+// the codePpointAt method though does give a full unicode character. So we could use that
+// to get the characters from a string.
 
+// A for/of loop can also be used on strongs. When you use it to loop over a string,
+// it gives you real characters, not code units.
 
+let roseDragon = "🌹🐉";
+for (let char of roseDragon) {
+	console.log(char);
+}
+// → 🌹
+// → 🐉
+// if you a character (which will be a string of one or two code units), you
+// can use codePointAt(0) to get its code.
 
 
 
