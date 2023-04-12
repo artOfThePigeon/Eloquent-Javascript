@@ -21,7 +21,7 @@ function speak(line) {
 let whiteRabbit = {type: "white", speak};
 let hungryRabbit = {type: "hungry", speak};
 
-whiteRabbit.speak ("Oh my ears and whiskers, " +
+whiteRabbit.speak("Oh my ears and whiskers, " +
 				   "how late it's getting!");
 hungryRabbit.speak("I could use a carrot right now.")
 
@@ -30,3 +30,95 @@ hungryRabbit.speak("I could use a carrot right now.")
 // takes the 'this' value as its first argument, and treats further arguments as normal parameters.
 
 speak.call(hungryRabbit, "Burb!");
+
+// Arrow function do not bind their own 'this' but can see the 'this' binding of the scope
+// around them. Thus, you can do something like the following code which references 'this' from inside
+// a local function.
+function normalize() {
+	console.log(this.coords.map(n => n / this.length));
+}
+normalize.call({coords: [0, 2, 3], length: 5});
+// → [0, 0.4, 0.6]
+
+
+// Prototypes
+
+let empty = {};
+console.log(empty.toString);
+// → ƒ toString() { [native code] }
+console.log(empty.toString());
+// → [object Object]
+// I pulled a property out of an empty object. Magic!
+
+// In addition to their set of properties, most objects also have a prototype.
+// This gets serached for when an object gets a request for a property it does not have.
+
+console.log(Object.getPrototypeOf({}) ==
+		    Object.prototype);
+// → true
+console.log(Object.getPrototypeOf(Object.prototype));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
