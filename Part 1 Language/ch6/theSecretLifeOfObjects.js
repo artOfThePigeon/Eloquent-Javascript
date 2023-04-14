@@ -57,9 +57,34 @@ console.log(Object.getPrototypeOf({}) ==
 		    Object.prototype);
 // → true
 console.log(Object.getPrototypeOf(Object.prototype));
+// → null 
 
+console.log(Object.getPrototypeOf(Math.max) == 
+	        Function.prototype);
+// → true
 
+console.log(Object.getPrototypeOf([]) ==
+			Array.prototype);
+// → true
 
+let protoRabbit = {
+	speak(line) {
+		console.log(`The ${this.type} rabbit says'${line}'`);
+	}
+};
+let killerRabbit = Object.create(protoRabbit);
+killerRabbit.type = 'killer';
+killerRabbit.speak("SKREEEE!");
+// A property like speak(line) in an object expression is a short hand way of defining a method.
+// It creates a property called speak and gives it a function as its value.
+
+// Classes
+
+function makeRabbit(type) {
+	let rabbit = Object.create(protoRabbit);
+	rabbit.type = type;
+	return rabbit;
+}
 
 
 
