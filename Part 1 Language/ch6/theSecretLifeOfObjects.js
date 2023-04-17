@@ -114,10 +114,21 @@ class Rabbit {
 let killerRabbit = new Rabbit("killer");
 let blackRabbit = new Rabbit("black");
 
+// life 'function,' 'class' can be used both in statements and in expressions. when used as an expression,
+// it doesn't define a binding but just produces the constructor as a value. You are allowed to omit the class name
+// in a class expression
 
+let object = new class { getWord() { return "hello";} };
+console.log(object.getWord());
 
+// Overriding derived Properties
 
-
+Rabbit.prototype.teeth = "small";
+console.log(killerRabbit.teeth);
+// → small
+killerRabbit.teeth = "long, sharp, and bloody";
+console.log(killerRabbit.teeth);
+// → long, sharp, and bloody
 
 
 
