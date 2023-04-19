@@ -129,6 +129,19 @@ console.log(killerRabbit.teeth);
 killerRabbit.teeth = "long, sharp, and bloody";
 console.log(killerRabbit.teeth);
 // → long, sharp, and bloody
+console.log(blackRabbit.teeth);
+// → small
+console.log(Rabbit.prototype.teeth);
+// → small
+
+// Overriding is also used to give the standard function and array prototypes a different 'toString'
+// method than the basic object prototype.
+
+console.log(Array.prototype.toString ==
+			Object.prototype.toString);
+// → false
+console.log([1, 2].toString());
+// → 1,2
 
 
 
