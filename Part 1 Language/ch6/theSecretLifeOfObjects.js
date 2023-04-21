@@ -143,13 +143,25 @@ console.log(Array.prototype.toString ==
 console.log([1, 2].toString());
 // → 1,2
 
+console.log(Object.prototype.toString.call([1, 2]));
+// → [object Array]
 
+// MAPS
 
+let ages = {
+	Boris: 39,
+	Liang: 22,
+	Julia:62
+}
 
-
-
-
-
+console.log(`Julia is ${ages["Julia"]}`);
+// → Julia is 62
+console.log("Is Jack's age known?", "Jack" in ages);
+// → Is Jack's age known? false
+console.log("Is toString's age known?", "toString" in ages);
+// → Is toString's age known? true
+// Here, the object's property names are the people's names, and the property values are their ages. But we certainly didn't list anybody named toString.
+// Yes, because plain objects derive from Object.prototype, it looks like the property is there.
 
 
 
