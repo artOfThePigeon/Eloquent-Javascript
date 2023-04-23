@@ -164,13 +164,24 @@ console.log("Is toString's age known?", "toString" in ages);
 // Yes, because plain objects derive from Object.prototype, it looks like the property is there.
 
 
+// If you pass null to Object.create, the resulting object will not derive from Object.prototype and can safely be used as a map.
+console.log("toString" in Object.create(null));
+// → false
 
+// Object property names must be strings. If you need a map whose keys can't easily be converted to strings, such as obects, you cannot use an object as your map.
+// Fortunately, Javascript comes with a class called Map that is written for this exact purpose. It stores a mapping ans allows any type of keys:
 
+let ages = new Map();
+ages.set("Boris", 39);
+ages.set("Liang", 22);
+ages.set("Julia", 62);
 
-
-
-
-
+console.log(`Julia is ${ages.get("Julia")}`);
+// → Julia is 62
+console.log("Is Jack's age known?", ages.has("Jack"));
+// → Is Jack's age known? false
+console.log(ages.has("toString"));
+// → false
 
 
 
