@@ -183,17 +183,28 @@ console.log("Is Jack's age known?", ages.has("Jack"));
 console.log(ages.has("toString"));
 // → false
 
+// As an alternative to the in operator, you can use the hasOwnProperty method, which ignores the object’s prototype.
+console.log({x: 1}.hasOwnProperty("x"));
+// → true
+console.log({x: 1}.hasOwnProperty("toString"))
+// → false
 
+// POLYMORPHISM
 
+Rabbit.prototype.toString = function() {
+	return `a ${this.type} rabbit`;
+}
+console.log(String(blackRabbit));
+// → a black rabbit
 
+//SYMBOLS
 
-
-
-
-
-
-
-
+let sym = Symbol("name");
+console.log(sym == Symbol("name"));
+// → false
+Rabbit.prototype[sym] = 55;
+console.log(blackRabbit[sym]);
+// → 55
 
 
 
